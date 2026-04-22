@@ -32,136 +32,152 @@ CREATE TABLE Bill (
     patient_id INT,
     amount INT,
     date DATE
-);`
+);
+INSERT INTO Patient VALUES (1, 'Rohan', 20, 'Male', '9999999999');
+INSERT INTO Patient VALUES (2, 'Amit', 22, 'Male', '8888888888');
+
+INSERT INTO Doctor VALUES (1, 'Dr. Sharma', 'Cardiology');
+INSERT INTO Doctor VALUES (2, 'Dr. Mehta', 'Orthopedic');
+
+INSERT INTO Appointment VALUES (1, 1, 1, '2026-04-22', '10:00:00');
+INSERT INTO Appointment VALUES (2, 2, 2, '2026-04-23', '11:00:00');
+
+INSERT INTO Bill VALUES (1, 1, 5000, '2026-04-22');
+INSERT INTO Bill VALUES (2, 2, 3000, '2026-04-23');`
   },
   {
-    title: "MainBoard Class Program",
-    icon: "🎮",
-    code: `public class MainBoard {
-    private List<Card> cards;
-    
-    public void setupGame() {
-        // Initialize the game board
-        cards = new ArrayList<>();
-        // Add game logic here
-    }
-}`
+    title: "Performing practical by using Aggregate functions.",
+    icon: "📋",
+    code: `SELECT COUNT(*) AS total_patients FROM Patient;
+SELECT AVG(amount) AS avg_bill FROM Bill;
+`
   },
   {
-    title: "WindowCard Class Program",
-    icon: "🪟",
-    code: `public class WindowCard extends JFrame {
-    public WindowCard() {
-        setTitle("Game Interface");
-        setSize(800, 600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-}`
+    title: "Performing practical by using SET operators like Union,Intersect etc.",
+    icon: "📋",
+    code: `SELECT name FROM Patient
+UNION
+SELECT name FROM Doctor;
+
+SELECT name FROM Patient
+INTERSECT
+SELECT name FROM Doctor;
+
+SELECT name FROM Patient
+MINUS
+SELECT name FROM Doctor;`
   },
   {
-    title: "ScoreCard Program",
-    icon: "🏆",
-    code: `public class ScoreCard {
-    private int score;
-    
-    public void addPoints(int p) {
-        score += p;
-    }
-    
-    public int getScore() {
-        return score;
-    }
-}`
+    title: "Perform practical by using GROUP BY and ORDERBY Clause.",
+    icon: "📋",
+    code: `SELECT doctor_id, COUNT(*) AS total_appointments
+FROM Appointment
+GROUP BY doctor_id
+ORDER BY total_appointments DESC;
+`
   },
   {
-    title: "Message Card Program",
-    icon: "💬",
-    code: `public class MessageCard {
-    public void showMessage(String msg) {
-        System.out.println("Notification: " + msg);
-    }
-}`
+    title: "Perform practical by using HAVING Clause.",
+    icon: "📋",
+    code: `SELECT doctor_id, COUNT(*) AS total_appointments
+FROM Appointment
+GROUP BY doctor_id
+HAVING COUNT(*) > 5;
+`
   },
   {
-    title: "Game Controller",
-    icon: "🕹️",
-    code: `public class GameController {
-    public void startGame() {
-        System.out.println("Game started!");
-    }
-    
-    public void pauseGame() {
-        // Pause logic
-    }
-}`
+    title: "Execute Queries using Inner JOIN operation.",
+    icon: "📋",
+    code: `SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+INNER JOIN Patient P ON A.patient_id = P.patient_id
+INNER JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
-    title: "Card Validator",
-    icon: "✅",
-    code: `public class CardValidator {
-    public boolean isValid(Card card) {
-        return card != null && card.getId() > 0;
-    }
-}`
+    title: "Execute Queries using Left outer JOIN operation.",
+    icon: "📋",
+    code: `SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+LEFT JOIN Patient P ON A.patient_id = P.patient_id
+LEFT JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
-    title: "Card Generator",
-    icon: "⚡",
-    code: `public class CardGenerator {
-    public Card createCard(String type) {
-        return new Card(type);
-    }
-}`
+    title: "Execute Queries using Right outer JOIN operation.",
+    icon: "📋",
+    code: `SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+RIGHT JOIN Patient P ON A.patient_id = P.patient_id
+RIGHT JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
-    title: "Card Shuffler",
-    icon: "🔀",
-    code: `public class CardShuffler {
-    public void shuffle(List<Card> deck) {
-        Collections.shuffle(deck);
-    }
-}`
+    title: "Execute Queries using Full outer JOIN operation.",
+    icon: "📋",
+    code: `SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+FULL OUTER JOIN Patient P ON A.patient_id = P.patient_id
+FULL OUTER JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
-    title: "Card Deck",
-    icon: "🃏",
-    code: `public class CardDeck {
-    private Stack<Card> deck;
-    
-    public Card draw() {
-        return deck.pop();
-    }
-}`
+    title: "Performing practical by using Views.",
+    icon: "📋",
+    code: `CREATE VIEW AppointmentView AS
+SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+INNER JOIN Patient P ON A.patient_id = P.patient_id
+INNER JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
-    title: "Player Class",
-    icon: "👤",
-    code: `public class Player {
-    private String username;
-    private int level;
-    
-    public void levelUp() {
-        level++;
-    }
-}`
+    title: "Performing practical by using TRIGGER concept",
+    icon: "📋",
+    code: `CREATE TRIGGER after_appointment
+AFTER INSERT ON Appointment
+BEGIN
+    INSERT INTO Audit (action, table_name, row_id, changed_by)
+    VALUES ('INSERT', 'Appointment', NEW.appointment_id, USER());
+END;`
   },
   {
-    title: "Game Logic",
-    icon: "🧠",
-    code: `public class GameLogic {
-    public void processMove() {
-        // Core game mechanics
-    }
-}`
-  }
+    title: "Execute queries for Exist and NOT EXIST.",
+    icon: "📋",
+    code: `SELECT * FROM Patient
+WHERE EXISTS (
+    SELECT 1 FROM Appointment A
+    WHERE A.patient_id = Patient.patient_id
+);
+SELECT * FROM Patient
+WHERE NOT EXISTS (
+    SELECT 1 FROM Appointment A
+    WHERE A.patient_id = Patient.patient_id
+);
+`
+  },
+  {
+    title: "Performing practical by using DCL (Grant ,Revoke) statements.",
+    icon: "📋",
+    code: `GRANT SELECT ON Appointment TO user1;
+REVOKE UPDATE ON Bill FROM user1;`
+  },
+  {
+    title: "Performing practical on stored procedures.",
+    icon: "📋",
+    code: `CREATE PROCEDURE GetPatientByID(
+    IN p_id INT,
+    OUT p_name VARCHAR(50),
+    OUT p_age INT
+) 
+BEGIN
+    SELECT name, age INTO p_name, p_age
+    FROM Patient WHERE patient_id = p_id;
+END;`
+  },
 ];
 
 function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1>Code Snippet Gallery</h1>
-        <p>A professional collection of Java components and game logic snippets. Click copy to use them in your project.</p>
+        <h1></h1>
+        <p>Guess who</p>
       </header>
 
       <main className="snippet-grid">
@@ -176,7 +192,7 @@ function App() {
       </main>
 
       <footer style={{ marginTop: '5rem', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-        <p>&copy; 2026 Snippet Gallery. Designed for professionals.</p>
+        <p>&copy; 2026. Designed by a professional.</p>
       </footer>
     </div>
   );
