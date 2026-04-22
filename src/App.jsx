@@ -500,7 +500,7 @@ function App() {
       </main> 
 
       <footer style={{ marginTop: '5rem', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-        <p>&copy; THE NOMADSTALLION.</p>
+        <b><p>THE NOMADSTALLION.</p></b>
       </footer>
     </div>
   );
