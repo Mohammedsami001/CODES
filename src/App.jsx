@@ -497,10 +497,10 @@ function App() {
             code={snippet.code}
           />
         ))}
-      </main>
+      </main> 
 
       <footer style={{ marginTop: '5rem', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-        <p>&copy; 2026. Designed by THE NOMADSTALLION.</p>
+        <p>&copy; 2026. Made by THE NOMADSTALLION.</p>
       </footer>
     </div>
   );
