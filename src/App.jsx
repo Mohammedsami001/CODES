@@ -174,13 +174,8 @@ END;`
 
 const osSnippets = [
   {
-    title: "System",
+    title: "System Calls (File Operations)",
     icon: "💻",
-    code: ``
-  },
-  {
-    title: "Process Creation using fork()",
-    icon: "🔱",
     code: `#include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -210,6 +205,24 @@ int main() {
     // Close file
     close(fd);
 
+    return 0;
+}`
+  },
+  {
+    title: "Process Creation using fork()",
+    icon: "🔱",
+    code: `#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t p = fork();
+    if (p < 0) {
+        printf("Fork failed\\n");
+    } else if (p == 0) {
+        printf("Hello from Child Process!\\n");
+    } else {
+        printf("Hello from Parent Process!\\n");
+    }
     return 0;
 }`
   },
