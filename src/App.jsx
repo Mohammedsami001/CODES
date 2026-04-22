@@ -197,10 +197,10 @@ int main() {
     read(fd, buffer, 12);
 
     // Null terminate the string
-    buffer[12] = '\0';
+    buffer[12] = '\\0';
 
     // Print output
-    printf("Data from file: %s\n", buffer);
+    printf("Data from file: %s\\n", buffer);
 
     // Close file
     close(fd);
