@@ -176,36 +176,40 @@ const osSnippets = [
   {
     title: "System",
     icon: "💻",
-    code: `#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-int main() {
-int fd;
-char buffer[50];
-fd = open("test.txt", O_CREAT | O_RDWR, 0644);
-write(fd, "Hello OS Lab", 12);
-lseek(fd, 0, SEEK_SET);
-read(fd, buffer, 12);
-printf("Data from file: %s\n", buffer);
-close(fd);
-return 0;
-}`
+    code: ``
   },
   {
     title: "Process Creation using fork()",
     icon: "🔱",
-    code: `#include <stdio.h>
+    code: `#include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 int main() {
-    pid_t p = fork();
-    if (p < 0) {
-        printf("Fork failed");
-    } else if (p == 0) {
-        printf("Hello from Child Process!");
-    } else {
-        printf("Hello from Parent Process!");
-    }
+    int fd;
+    char buffer[50];
+
+    // Open or create file
+    fd = open("test.txt", O_CREAT | O_RDWR, 0644);
+
+    // Write to file
+    write(fd, "Hello OS Lab", 12);
+
+    // Move file pointer to beginning
+    lseek(fd, 0, SEEK_SET);
+
+    // Read from file
+    read(fd, buffer, 12);
+
+    // Null terminate the string
+    buffer[12] = '\0';
+
+    // Print output
+    printf("Data from file: %s\n", buffer);
+
+    // Close file
+    close(fd);
+
     return 0;
 }`
   },
