@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SnippetCard from './components/SnippetCard';
 
-const snippets = [
+const dbmsSnippets = [
   {
     title: "Performing practical by using DDL statements (creating & managing tables, apply Constraints).",
     icon: "📝",
@@ -64,7 +64,7 @@ INTERSECT
 SELECT name FROM Doctor;
 
 SELECT name FROM Patient
-MINUS
+EXCEPT
 SELECT name FROM Doctor;`
   },
   {
@@ -172,18 +172,88 @@ END;`
   },
 ];
 
+const osSnippets = [
+  {
+    title: "System",
+    icon: "💻",
+    code: `#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+int main() {
+int fd;
+char buffer[50];
+fd = open("test.txt", O_CREAT | O_RDWR, 0644);
+write(fd, "Hello OS Lab", 12);
+lseek(fd, 0, SEEK_SET);
+read(fd, buffer, 12);
+printf("Data from file: %s\n", buffer);
+close(fd);
+return 0;
+}`
+  },
+  {
+    title: "Process Creation using fork()",
+    icon: "🔱",
+    code: `#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t p = fork();
+    if (p < 0) {
+        printf("Fork failed");
+    } else if (p == 0) {
+        printf("Hello from Child Process!");
+    } else {
+        printf("Hello from Parent Process!");
+    }
+    return 0;
+}`
+  },
+  {
+    title: "CPU Scheduling Algorithms",
+    icon: "⏱️",
+    code: `// FCFS, SJF, Round Robin
+// Add your scheduling code here...`
+  },
+  {
+    title: "Inter-Process Communication",
+    icon: "📡",
+    code: `// Pipes, Shared Memory, Message Queues
+// Add your IPC code here...`
+  }
+];
+
 function App() {
+  const [activeTab, setActiveTab] = useState('DBMS');
+
+  const currentSnippets = activeTab === 'DBMS' ? dbmsSnippets : osSnippets;
+
   return (
     <div className="container">
       <header className="header">
-        <h1></h1>
-        <p>Guess who</p>
+        <h1>Code Snippet Gallery</h1>
+        <p>A professional collection of code snippets for DBMS and OS.</p>
+        
+        <div className="nav-container">
+          <button 
+            className={`nav-btn ${activeTab === 'DBMS' ? 'active' : ''}`}
+            onClick={() => setActiveTab('DBMS')}
+          >
+            DBMS Practicals
+          </button>
+          <button 
+            className={`nav-btn ${activeTab === 'OS' ? 'active' : ''}`}
+            onClick={() => setActiveTab('OS')}
+          >
+            OS Practicals
+          </button>
+        </div>
       </header>
 
       <main className="snippet-grid">
-        {snippets.map((snippet, index) => (
+        {currentSnippets.map((snippet, index) => (
           <SnippetCard 
-            key={index}
+            key={`${activeTab}-${index}`}
             title={snippet.title}
             icon={snippet.icon}
             code={snippet.code}
@@ -192,7 +262,7 @@ function App() {
       </main>
 
       <footer style={{ marginTop: '5rem', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-        <p>&copy; 2026. Designed by a professional.</p>
+        <p>&copy; 2026. Designed for professionals.</p>
       </footer>
     </div>
   );
