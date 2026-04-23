@@ -178,7 +178,7 @@ import vlan3 from './assets/vlan_config_3.jpg';
 
 const mdmSnippets = [
   {
-    title: "Cisco Switch & VLAN Configuration (Packet Tracer)",
+    title: "EXP 2",
     icon: "🌐",
     images: [vlan1, vlan2, vlan3],
     code: `// Basic Switch Configuration
@@ -193,7 +193,76 @@ smit(config-if)# no shutdown
 smit(config-if)# exit
 
 // Verify Configuration
-smit# show ip interface brief`
+smit# show ip interface brief
+Writeup:
+Expt no.2
+AIM:-To identify modem, router, and switch hardware and demonstrate their working in a computer network.
+Objectives:-
+1.	To identify the physical components of modem, router, and switch
+2.	To understand the function of each device
+3.	To demonstrate data communication using these devices
+
+Apparatus / Requirements:-
+•	Modem
+•	Router
+•	Switch
+•	Ethernet (LAN) cables
+•	Computer / Laptop
+•	Power supply
+Theory
+1. Modem
+A modem (Modulator–Demodulator) converts digital signals from a computer into analog signals for transmission and converts incoming analog signals back into digital form.
+Functions:
+•	Provides internet connectivity
+•	Converts digital ↔ analog signals
+________________________________________
+2. Router
+A router connects multiple networks and forwards data packets using IP addresses.
+Functions:
+•	Routes data between networks
+•	Assigns IP addresses (DHCP)
+•	Provides network security
+________________________________________
+3. Switch
+A switch connects multiple devices within a Local Area Network (LAN) and forwards data using MAC addresses.
+Functions:
+•	Enables device-to-device communication
+•	Reduces network collisions
+•	Improves network speed
+Procedure (Step-by-Step)
+A. Identification of Hardware
+1.	Observe the modem and identify:
+o	Power port
+o	Line/DSL/Coaxial port
+o	LAN port
+o	LED indicators
+2.	Observe the router and identify:
+o	WAN port
+o	LAN ports
+o	Antennas
+o	Status LEDs
+3.	Observe the switch and identify:
+o	Ethernet ports
+o	Power connector
+o	Activity LEDs
+________________________________________
+B. Demonstration of Working
+1.	Connect the modem to the ISP line.
+2.	Connect the modem to the router using an Ethernet cable.
+3.	Connect the router to the switch.
+4.	Connect computers to the switch.
+5.	Switch ON all devices.
+6.	Access the internet or transfer data between computers.
+________________________________________
+Observation
+•	Modem successfully provides internet access.
+•	Router routes data between networks.
+•	Switch enables communication among LAN devices.
+•	Data transmission is successful.
+________________________________________
+Conclusion:-
+Modem, router, and switch are essential networking devices. Together, they enable internet access, routing, and efficient local communication in a network.
+`
   },
   {
     title: "Basic CRUD - Inserting Documents into MongoDB",
