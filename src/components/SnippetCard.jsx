@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SnippetCard = ({ title, code, icon }) => {
+const SnippetCard = ({ title, code, icon, images }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -43,7 +43,9 @@ const SnippetCard = ({ title, code, icon }) => {
 
       let styledLine = escapedLine
         // Highlight keywords (Java, SQL, & C)
-        .replace(/\b(public|private|protected|class|static|void|int|String|return|new|import|package|extends|implements|CREATE|TABLE|PRIMARY|KEY|VARCHAR|INT|DATE|TIME|INSERT|INTO|VALUES|SELECT|FROM|WHERE|COUNT|AVG|SUM|MIN|MAX|AS|GROUP|ORDER|BY|DESC|ASC|HAVING|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|UNION|INTERSECT|MINUS|EXCEPT|VIEW|TRIGGER|AFTER|BEFORE|BEGIN|END|EXISTS|NOT|GRANT|REVOKE|PROCEDURE|IN|OUT|DATABASE|USE|DROP|ALTER|ADD|CONSTRAINT|FOREIGN|REFERENCES|CHECK|UNIQUE|DEFAULT|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|printf|main|char|#include|#define|pid_t|fork|open|write|read|close|lseek|SEEK_SET|O_CREAT|O_RDWR)\b/gi, '<span class="keyword">$1</span>')
+        .replace(/\b(public|private|protected|class|static|void|int|String|return|new|import|package|extends|implements|CREATE|TABLE|PRIMARY|KEY|VARCHAR|INT|DATE|TIME|INSERT|INTO|VALUES|SELECT|FROM|WHERE|COUNT|AVG|SUM|MIN|MAX|AS|GROUP|ORDER|BY|DESC|ASC|HAVING|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|UNION|INTERSECT|MINUS|EXCEPT|VIEW|TRIGGER|AFTER|BEFORE|BEGIN|END|EXISTS|NOT|GRANT|REVOKE|PROCEDURE|IN|OUT|DATABASE|USE|DROP|ALTER|ADD|CONSTRAINT|FOREIGN|REFERENCES|CHECK|UNIQUE|DEFAULT|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|printf|main|char|#include|#define|pid_t|fork|open|write|read|close|lseek|SEEK_SET|O_CREAT|O_RDWR|db|insertOne|insertMany|find|updateOne|updateMany|deleteOne|deleteMany|aggregate|match|group|sort|project|limit|skip|createIndex|getIndexes|bsonType|enum|pattern|validator|jsonSchema|enable|configure|terminal|hostname|interface|shutdown|brief)\b/gi, '<span class="keyword">$1</span>')
+        // Highlight MongoDB Operators (starting with $)
+        .replace(/(\$[a-zA-Z0-9]+)/g, '<span class="keyword">$1</span>')
         // Highlight Class Names / Data Types (Starts with Uppercase or specific types)
         .replace(/\b(?!(?:public|private|protected|class|static|void|int|String|return|new|import|package|extends|implements|CREATE|TABLE|PRIMARY|KEY|VARCHAR|INT|DATE|TIME|INSERT|INTO|VALUES|SELECT|FROM|WHERE|COUNT|AVG|SUM|MIN|MAX|AS|GROUP|ORDER|BY|DESC|ASC|HAVING|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|ON|UNION|INTERSECT|MINUS|EXCEPT|VIEW|TRIGGER|AFTER|BEFORE|BEGIN|END|EXISTS|NOT|GRANT|REVOKE|PROCEDURE|IN|OUT|DATABASE|USE|DROP|ALTER|ADD|CONSTRAINT|FOREIGN|REFERENCES|CHECK|UNIQUE|DEFAULT|INDEX|VIEW|PROCEDURE|FUNCTION|TRIGGER|printf|main|char|#include|#define|pid_t|fork|open|write|read|close|lseek|SEEK_SET|O_CREAT|O_RDWR)\b)([A-Z][a-zA-Z0-9]+)\b/g, '<span class="class-name">$1</span>')
         .replace(/"([^"]*)"/g, '<span class="string">"$1"</span>')
@@ -57,7 +59,7 @@ const SnippetCard = ({ title, code, icon }) => {
   };
 
   return (
-    <div className="code-card">
+    <div className={`code-card ${images ? 'has-images' : ''}`}>
       <div className="card-header">
         <span className="card-icon">{icon}</span>
         <h3 className="card-title">{title}</h3>
@@ -67,6 +69,15 @@ const SnippetCard = ({ title, code, icon }) => {
           {renderCode(code)}
         </div>
       </div>
+      {images && images.length > 0 && (
+        <div className="image-gallery">
+          {images.map((img, idx) => (
+            <div key={idx} className="gallery-item">
+              <img src={img} alt={`${title} screenshot ${idx + 1}`} />
+            </div>
+          ))}
+        </div>
+      )}
       <div className="card-footer">
         <button 
           className={`copy-btn ${copied ? 'copied' : ''}`} 
@@ -78,5 +89,6 @@ const SnippetCard = ({ title, code, icon }) => {
     </div>
   );
 };
+
 
 export default SnippetCard;
