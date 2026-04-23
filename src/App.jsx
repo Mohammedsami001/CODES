@@ -33,6 +33,35 @@ CREATE TABLE Bill (
     amount INT,
     date DATE
 );
+
+CREATE TABLE Audit (
+    action VARCHAR(20),
+    table_name VARCHAR(50),
+    row_id INT,
+    changed_by VARCHAR(50)
+);
+
+-- 1. Add a new column
+ALTER TABLE Patient
+ADD email VARCHAR(100);
+
+-- 2. Modify an existing column
+ALTER TABLE Doctor
+MODIFY name VARCHAR(100);
+
+-- 3. Rename a column
+ALTER TABLE Patient
+RENAME COLUMN phone TO contact_no;
+
+-- 4. Add a FOREIGN KEY constraint
+ALTER TABLE Appointment
+ADD CONSTRAINT fk_patient
+FOREIGN KEY (patient_id) REFERENCES Patient(patient_id);
+
+-- 5. Drop a column
+ALTER TABLE Patient
+DROP COLUMN email;
+
 INSERT INTO Patient VALUES (1, 'Rohan', 20, 'Male', '9999999999');
 INSERT INTO Patient VALUES (2, 'Amit', 22, 'Male', '8888888888');
 
@@ -48,41 +77,120 @@ INSERT INTO Bill VALUES (2, 2, 3000, '2026-04-23');`
   {
     title: "Performing practical by using Aggregate functions.",
     icon: "📋",
-    code: `SELECT COUNT(*) AS total_patients FROM Patient;
-SELECT AVG(amount) AS avg_bill FROM Bill;
+    code: `-- 1. COUNT: Total patients
+SELECT COUNT(*) AS total_patients
+FROM Patient;
+
+-- 2. SUM: Total revenue
+SELECT SUM(amount) AS total_revenue
+FROM Bill;
+
+-- 3. AVG: Average bill amount
+SELECT AVG(amount) AS avg_bill
+FROM Bill;
+
+-- 4. MAX & MIN: Highest and lowest bill
+SELECT MAX(amount) AS highest_bill,
+       MIN(amount) AS lowest_bill
+FROM Bill;
+
+-- 5. GROUP BY: Total bill per patient
+SELECT patient_id, SUM(amount) AS total_bill
+FROM Bill
+GROUP BY patient_id;
 `
   },
   {
     title: "Performing practical by using SET operators like Union,Intersect etc.",
     icon: "📋",
-    code: `SELECT name FROM Patient
+    code: `-- 1. UNION: Get all names from Patient and Doctor (no duplicates)
+SELECT name FROM Patient
 UNION
 SELECT name FROM Doctor;
 
+-- 2. UNION ALL: Get all names including duplicates
 SELECT name FROM Patient
-INTERSECT
+UNION ALL
 SELECT name FROM Doctor;
 
-SELECT name FROM Patient
+-- 3. INTERSECT: Patients who also have bills
+SELECT patient_id FROM Patient
+INTERSECT
+SELECT patient_id FROM Bill;
+
+-- 4. EXCEPT: Patients who do NOT have bills
+SELECT patient_id FROM Patient
 EXCEPT
-SELECT name FROM Doctor;`
+SELECT patient_id FROM Bill;
+
+-- 5. UNION with condition: Patients and Doctors with similar criteria
+SELECT name FROM Patient WHERE age > 21
+UNION
+SELECT name FROM Doctor WHERE specialization = 'Cardiology';
+-- INTERSECT and EXCEPT may not work in MySQL.`
   },
   {
     title: "Perform practical by using GROUP BY and ORDERBY Clause.",
     icon: "📋",
-    code: `SELECT doctor_id, COUNT(*) AS total_appointments
-FROM Appointment
-GROUP BY doctor_id
-ORDER BY total_appointments DESC;
+    code: `-- 1. GROUP BY: Number of patients by gender
+SELECT gender, COUNT(*) AS total_patients
+FROM Patient
+GROUP BY gender;
+
+-- 2. GROUP BY: Total bill per patient
+SELECT patient_id, SUM(amount) AS total_bill
+FROM Bill
+GROUP BY patient_id;
+
+-- 3. ORDER BY: Patients sorted by age (ascending)
+SELECT * 
+FROM Patient
+ORDER BY age ASC;
+
+-- 4. ORDER BY: Bills sorted by amount (descending)
+SELECT * 
+FROM Bill
+ORDER BY amount DESC;
+
+-- 5. GROUP BY + ORDER BY: Total bill per patient (highest first)
+SELECT patient_id, SUM(amount) AS total_bill
+FROM Bill
+GROUP BY patient_id
+ORDER BY total_bill DESC;
 `
   },
   {
     title: "Perform practical by using HAVING Clause.",
     icon: "📋",
-    code: `SELECT doctor_id, COUNT(*) AS total_appointments
+    code: `-- 1. Patients whose total bill is greater than 4000
+SELECT patient_id, SUM(amount) AS total_bill
+FROM Bill
+GROUP BY patient_id
+HAVING SUM(amount) > 4000;
+
+-- 2. Doctors having more than 0 appointments
+SELECT doctor_id, COUNT(*) AS total_appointments
 FROM Appointment
 GROUP BY doctor_id
-HAVING COUNT(*) > 5;
+HAVING COUNT(*) > 0;
+
+-- 3. Gender groups with average age greater than 21
+SELECT gender, AVG(age) AS avg_age
+FROM Patient
+GROUP BY gender
+HAVING AVG(age) > 21;
+
+-- 4. Patients having more than 1 bill
+SELECT patient_id, COUNT(*) AS bill_count
+FROM Bill
+GROUP BY patient_id
+HAVING COUNT(*) > 1;
+
+-- 5. Total bill per patient greater than average bill amount
+SELECT patient_id, SUM(amount) AS total_bill
+FROM Bill
+GROUP BY patient_id
+HAVING SUM(amount) > (SELECT AVG(amount) FROM Bill);
 `
   },
   {
@@ -114,8 +222,15 @@ RIGHT JOIN Doctor D ON A.doctor_id = D.doctor_id;`
     icon: "📋",
     code: `SELECT P.name AS patient, D.name AS doctor
 FROM Appointment A
-FULL OUTER JOIN Patient P ON A.patient_id = P.patient_id
-FULL OUTER JOIN Doctor D ON A.doctor_id = D.doctor_id;`
+LEFT JOIN Patient P ON A.patient_id = P.patient_id
+LEFT JOIN Doctor D ON A.doctor_id = D.doctor_id
+
+UNION
+
+SELECT P.name AS patient, D.name AS doctor
+FROM Appointment A
+RIGHT JOIN Patient P ON A.patient_id = P.patient_id
+RIGHT JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   },
   {
     title: "Performing practical by using Views.",
@@ -129,12 +244,17 @@ INNER JOIN Doctor D ON A.doctor_id = D.doctor_id;`
   {
     title: "Performing practical by using TRIGGER concept",
     icon: "📋",
-    code: `CREATE TRIGGER after_appointment
+    code: `DELIMITER $$
+
+CREATE TRIGGER after_appointment
 AFTER INSERT ON Appointment
+FOR EACH ROW
 BEGIN
     INSERT INTO Audit (action, table_name, row_id, changed_by)
     VALUES ('INSERT', 'Appointment', NEW.appointment_id, USER());
-END;`
+END$$
+
+DELIMITER ;`
   },
   {
     title: "Execute queries for Exist and NOT EXIST.",
@@ -154,21 +274,34 @@ WHERE NOT EXISTS (
   {
     title: "Performing practical by using DCL (Grant ,Revoke) statements.",
     icon: "📋",
-    code: `GRANT SELECT ON Appointment TO user1;
-REVOKE UPDATE ON Bill FROM user1;`
+    code: `CREATE USER 'user1'@'localhost' IDENTIFIED BY 'password';
+
+GRANT SELECT ON your_database.Appointment TO 'user1'@'localhost';
+
+REVOKE UPDATE ON your_database.Bill FROM 'user1'@'localhost';`
   },
   {
     title: "Performing practical on stored procedures.",
     icon: "📋",
-    code: `CREATE PROCEDURE GetPatientByID(
+    code: `DELIMITER $$
+
+CREATE PROCEDURE GetPatientByID(
     IN p_id INT,
     OUT p_name VARCHAR(50),
     OUT p_age INT
-) 
+)
 BEGIN
     SELECT name, age INTO p_name, p_age
-    FROM Patient WHERE patient_id = p_id;
-END;`
+    FROM Patient
+    WHERE patient_id = p_id;
+END$$
+
+DELIMITER ;
+
+-- To CALL it 
+CALL GetPatientByID(1, @name, @age);
+SELECT @name, @age;
+`
   },
 ];
 
