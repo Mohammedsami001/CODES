@@ -265,36 +265,148 @@ Modem, router, and switch are essential networking devices. Together, they enabl
 `
   },
   {
-    title: "Basic CRUD - Inserting Documents into MongoDB",
-    icon: "🍃",
-    code: `// Insert a single document
-db.patients.insertOne({
-    name: "Rohan",
-    age: 20,
-    gender: "Male",
-    phone: "9999999999",
-    records: []
-});
-
-// Insert multiple documents
-db.doctors.insertMany([
-    { name: "Dr. Sharma", specialization: "Cardiology" },
-    { name: "Dr. Mehta", specialization: "Orthopedic" }
-]);`
+    title: "EXP 5",
+    icon: "🌐",
+    code: `Experiment No. 5
+Aim:
+To study and demonstrate the transmission of signals through wireless media.
+Apparatus / Requirements:
+- Computer / Laptop
+- Cisco Packet Tracer
+- Wireless Router / Access Point
+- Wireless End Devices
+- Power Supply
+Theory:
+Wireless communication is the transfer of information without physical cables using electromagnetic waves like radio waves.
+Block Diagram:
+Data Source → Transmitter → Antenna → Air → Antenna → Receiver → Destination
+Procedure:
+1. Open Cisco Packet Tracer.
+2. Add wireless router and devices.
+3. Configure SSID and security.
+4. Connect devices wirelessly.
+5. Test connectivity using ping.
+Observation:
+Wireless transmission was successful without cables.
+Conclusion:
+Wireless media provides mobility and flexibility but has interference issues.
+`
   },
   {
-    title: "Querying with Filters and Projection",
-    icon: "🍃",
-    code: `// Find all patients older than 21
-db.patients.find({ 
-    age: { $gt: 21 } 
-});
-
-// Find specific doctor and return only name and specialization
-db.doctors.find(
-    { specialization: "Cardiology" },
-    { name: 1, specialization: 1, _id: 0 }
-);`
+    title: "EXP 3",
+    icon: "🌐",
+    code: `Exp no 3
+Aim:-
+To study and understand the basic components of a mobile (cellular) network and demonstrate their roles in providing mobile communication services.
+Objectives
+•	To identify major mobile network components
+•	To understand the function of each component
+•	To study call flow and data communication in a mobile network
+•	To demonstrate mobile network architecture using diagrams / simulation
+________________________________________
+Apparatus / Tools Required
+•	Computer / Laptop
+•	Cisco Packet Tracer (optional – for network understanding)
+•	Mobile phone (for real-time observation)
+•	Internet connection
+•	Lab manual / PPT
+________________________________________
+Theory
+A mobile network (cellular network) allows wireless communication over large areas by dividing the coverage region into cells. Each cell is served by a Base Station and controlled by the core network.
+Main Components of Mobile Network
+________________________________________
+1️⃣ Mobile Station (MS)
+•	User equipment such as mobile phone or smartphone
+•	Consists of:
+o	Mobile Equipment (ME)
+o	SIM card
+•	Functions:
+o	Voice calls
+o	SMS
+o	Data services (Internet)
+________________________________________
+2️⃣ Base Transceiver Station (BTS) / Node B / eNodeB / gNodeB
+•	Provides radio communication with mobile users
+•	Terminology changes with generation:
+o	2G → BTS
+o	3G → Node B
+o	4G → eNodeB
+o	5G → gNodeB
+•	Functions:
+o	Transmits and receives radio signals
+o	Covers a specific geographical area (cell)
+________________________________________
+3️⃣ Base Station Controller (BSC) / Radio Network Controller (RNC)
+•	Controls multiple base stations
+•	Functions:
+o	Call handover
+o	Channel allocation
+o	Power control
+•	Used mainly in 2G and 3G networks
+________________________________________
+4️⃣ Mobile Switching Center (MSC)
+•	Core network component for voice calls
+•	Functions:
+o	Call setup and routing
+o	Call termination
+o	Billing and mobility management
+________________________________________
+5️⃣ Home Location Register (HLR)
+•	Central database of subscribers
+•	Stores:
+o	User profile
+o	Mobile number
+o	Services allowed
+________________________________________
+6️⃣ Visitor Location Register (VLR)
+•	Temporary database
+•	Stores information of users currently roaming in a network area
+________________________________________
+7️⃣ Authentication Center (AuC)
+•	Provides security and authentication
+•	Verifies user identity using SIM credentials
+________________________________________
+8️⃣ Packet Core (for Data Services)
+•	Handles internet and packet data
+•	Examples:
+o	SGSN, GGSN (3G)
+o	EPC (4G)
+o	5G Core (5G)
+________________________________________
+Block Diagram of Mobile Network
+Mobile Station
+      |
+   BTS / NodeB / eNodeB
+      |
+   BSC / RNC
+      |
+   MSC / Core Network
+      |
+ PSTN / Internet
+(Draw neatly in exam / practical file)
+________________________________________
+Procedure / Demonstration Steps
+1.	Identify the mobile phone as a Mobile Station.
+2.	Observe nearby cell towers (BTS/eNodeB).
+3.	Explain how signals travel from:
+o	Mobile → Base Station → Core Network
+4.	Demonstrate:
+o	Voice call flow
+o	SMS transmission
+o	Mobile data access
+5.	(Optional) Use Cisco Packet Tracer to:
+o	Create a simple wireless network
+o	Connect devices through a simulated core network
+6.	Perform ping test or data access to show connectivity.
+________________________________________
+Observation
+•	Mobile phone successfully connects to the network.
+•	Voice calls and data services work through base stations.
+•	Core network manages routing and authentication.
+________________________________________
+Conclusion
+Mobile networks use a combination of radio access network and core network components to provide seamless communication. Each component plays a vital role in ensuring connectivity, mobility, and security.
+`
   },
   {
     title: "Aggregation Pipeline (Group & Sort)",
