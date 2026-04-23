@@ -175,6 +175,7 @@ END;`
 import vlan1 from './assets/vlan_config_1.jpg';
 import vlan2 from './assets/vlan_config_2.jpg';
 import vlan3 from './assets/vlan_config_3.jpg';
+import router1 from './assets/router_config_1.jpg';
 
 const mdmSnippets = [
   {
@@ -409,69 +410,15 @@ Mobile networks use a combination of radio access network and core network compo
 `
   },
   {
-    title: "Aggregation Pipeline (Group & Sort)",
-    icon: "🍃",
-    code: `// Count number of appointments per doctor
-db.appointments.aggregate([
-    { 
-        $group: { 
-            _id: "$doctor_id", 
-            total_appointments: { $sum: 1 } 
-        } 
-    },
-    { 
-        $sort: { total_appointments: -1 } 
-    }
-]);`
-  },
-  {
-    title: "Update and Delete Operations",
-    icon: "🍃",
-    code: `// Update patient's age and add a visit record
-db.patients.updateOne(
-    { name: "Rohan" },
-    { 
-        $set: { age: 21 },
-        $push: { visits: { date: "2026-04-23", reason: "Checkup" } }
-    }
-);
-
-// Delete all appointments before a certain date
-db.appointments.deleteMany({
-    date: { $lt: "2026-01-01" }
-});`
-  },
-  {
-    title: "Indexing for Performance",
-    icon: "🍃",
-    code: `// Create a single field index
-db.doctors.createIndex({ specialization: 1 });
-
-// Create a compound index for patient name and age
-db.patients.createIndex({ name: 1, age: -1 });
-
-// List all indexes
-db.patients.getIndexes();`
-  },
-  {
-    title: "Schema Validation (JSON Schema)",
-    icon: "🍃",
-    code: `db.createCollection("staff", {
-   validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         required: [ "name", "role", "email" ],
-         properties: {
-            name: { bsonType: "string" },
-            role: { enum: [ "Nurse", "Admin", "Tech" ] },
-            email: {
-               bsonType: "string",
-               pattern: "^.+@.+$"
-            }
-         }
-      }
-   }
-});`
+    title: "EXP 7",
+    icon: "🌐",
+    images: [router1],
+    code: `Router> enable
+Router# configure terminal
+Router(config)# interface fastethernet 0/1
+Router(config-if)# ip address 192.168.1.1 255.255.255.0
+Router(config-if)# no shutdown
+Router(config-if)# exit`
   }
 ];
 
